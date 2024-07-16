@@ -1,0 +1,13 @@
+apiVersion: gtm.edgeclound9.com/v1alpha1
+kind: Resource
+metadata:
+  name: test-gtm
+spec:
+  forProvider:
+    domain: "edgecloud9.com.akadns.net"
+    name: "edgecloud9.com.akadns.net"
+    aggregationType: "20"
+    type: "basic"
+    loadImbalancePercentage: 30
+  providerConfigRef:
+    name: default

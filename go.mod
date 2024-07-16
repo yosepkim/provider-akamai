@@ -1,4 +1,4 @@
-module github.com/upbound/upjet-provider-template
+module github.com/yosepkim/provider-akamai
 
 go 1.19
 
