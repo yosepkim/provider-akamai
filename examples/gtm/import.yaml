@@ -1,0 +1,8 @@
+apiVersion: gtm.edgeclound9.com/v1alpha1
+kind: Domain
+metadata:
+  name: imported-domain
+  annotations:
+    crossplane.io/external-name: edgecloud9.com.akadns.net
+spec:
+  forProvider: {}

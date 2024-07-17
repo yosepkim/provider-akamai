@@ -4,7 +4,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.13.0
-  name: resources.gtm.edgeclound9.com
+  name: domains.gtm.edgeclound9.com
 spec:
   group: gtm.edgeclound9.com
   names:
@@ -12,10 +12,10 @@ spec:
     - crossplane
     - managed
     - akamai
-    kind: Resource
-    listKind: ResourceList
-    plural: resources
-    singular: resource
+    kind: Domain
+    listKind: DomainList
+    plural: domains
+    singular: domain
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,7 +34,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Resource is the Schema for the Resources API. <no value>
+        description: Domain is the Schema for the Domains API. <no value>
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -49,7 +49,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: ResourceSpec defines the desired state of Resource
+            description: DomainSpec defines the desired state of Domain
             properties:
               deletionPolicy:
                 default: Delete
@@ -66,49 +66,45 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  aggregationType:
+                  cnameCoalescingEnabled:
+                    type: boolean
+                  comment:
                     type: string
-                  constrainedProperty:
+                  contract:
                     type: string
-                  decayRate:
+                  defaultErrorPenalty:
                     type: number
-                  description:
+                  defaultSslClientCertificate:
                     type: string
-                  domain:
+                  defaultSslClientPrivateKey:
                     type: string
-                  hostHeader:
-                    type: string
-                  leaderString:
-                    type: string
-                  leastSquaresDecay:
+                  defaultTimeoutPenalty:
                     type: number
+                  emailNotificationList:
+                    items:
+                      type: string
+                    type: array
+                  endUserMappingEnabled:
+                    type: boolean
+                  group:
+                    type: string
+                  loadFeedback:
+                    type: boolean
                   loadImbalancePercentage:
-                    type: number
-                  maxUMultiplicativeIncrement:
                     type: number
                   name:
                     type: string
-                  resourceInstance:
-                    items:
-                      properties:
-                        datacenterId:
-                          type: number
-                        loadObject:
-                          type: string
-                        loadObjectPort:
-                          type: number
-                        loadServers:
-                          items:
-                            type: string
-                          type: array
-                        useDefaultLoadObject:
-                          type: boolean
-                      type: object
-                    type: array
+                  signAndServe:
+                    description: If set (true) we will sign the domain's resource
+                      records so that they can be validated by a validating resolver.
+                    type: boolean
+                  signAndServeAlgorithm:
+                    description: 'The signing algorithm to use for signAndServe. One
+                      of the following values: RSA_SHA1, RSA_SHA256, RSA_SHA512, ECDSA_P256_SHA256,
+                      ECDSA_P384_SHA384, ED25519, ED448.'
+                    type: string
                   type:
                     type: string
-                  upperBound:
-                    type: number
                   waitOnComplete:
                     type: boolean
                 type: object
@@ -124,49 +120,45 @@ spec:
                   for example because of an external controller is managing them,
                   like an autoscaler.
                 properties:
-                  aggregationType:
+                  cnameCoalescingEnabled:
+                    type: boolean
+                  comment:
                     type: string
-                  constrainedProperty:
+                  contract:
                     type: string
-                  decayRate:
+                  defaultErrorPenalty:
                     type: number
-                  description:
+                  defaultSslClientCertificate:
                     type: string
-                  domain:
+                  defaultSslClientPrivateKey:
                     type: string
-                  hostHeader:
-                    type: string
-                  leaderString:
-                    type: string
-                  leastSquaresDecay:
+                  defaultTimeoutPenalty:
                     type: number
+                  emailNotificationList:
+                    items:
+                      type: string
+                    type: array
+                  endUserMappingEnabled:
+                    type: boolean
+                  group:
+                    type: string
+                  loadFeedback:
+                    type: boolean
                   loadImbalancePercentage:
-                    type: number
-                  maxUMultiplicativeIncrement:
                     type: number
                   name:
                     type: string
-                  resourceInstance:
-                    items:
-                      properties:
-                        datacenterId:
-                          type: number
-                        loadObject:
-                          type: string
-                        loadObjectPort:
-                          type: number
-                        loadServers:
-                          items:
-                            type: string
-                          type: array
-                        useDefaultLoadObject:
-                          type: boolean
-                      type: object
-                    type: array
+                  signAndServe:
+                    description: If set (true) we will sign the domain's resource
+                      records so that they can be validated by a validating resolver.
+                    type: boolean
+                  signAndServeAlgorithm:
+                    description: 'The signing algorithm to use for signAndServe. One
+                      of the following values: RSA_SHA1, RSA_SHA256, RSA_SHA512, ECDSA_P256_SHA256,
+                      ECDSA_P384_SHA384, ED25519, ED448.'
+                    type: string
                   type:
                     type: string
-                  upperBound:
-                    type: number
                   waitOnComplete:
                     type: boolean
                 type: object
@@ -331,14 +323,6 @@ spec:
             - forProvider
             type: object
             x-kubernetes-validations:
-            - message: spec.forProvider.aggregationType is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.aggregationType)
-                || (has(self.initProvider) && has(self.initProvider.aggregationType))'
-            - message: spec.forProvider.domain is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.domain)
-                || (has(self.initProvider) && has(self.initProvider.domain))'
             - message: spec.forProvider.name is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
@@ -348,55 +332,89 @@ spec:
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.type)
                 || (has(self.initProvider) && has(self.initProvider.type))'
           status:
-            description: ResourceStatus defines the observed state of Resource.
+            description: DomainStatus defines the observed state of Domain.
             properties:
               atProvider:
                 properties:
-                  aggregationType:
+                  cnameCoalescingEnabled:
+                    type: boolean
+                  comment:
                     type: string
-                  constrainedProperty:
+                  contract:
                     type: string
-                  decayRate:
+                  defaultErrorPenalty:
                     type: number
-                  description:
+                  defaultHealthMax:
+                    type: number
+                  defaultHealthMultiplier:
+                    type: number
+                  defaultHealthThreshold:
+                    type: number
+                  defaultMaxUnreachablePenalty:
+                    type: number
+                  defaultSslClientCertificate:
                     type: string
-                  domain:
+                  defaultSslClientPrivateKey:
                     type: string
-                  hostHeader:
+                  defaultTimeoutPenalty:
+                    type: number
+                  defaultUnreachableThreshold:
+                    type: number
+                  emailNotificationList:
+                    items:
+                      type: string
+                    type: array
+                  endUserMappingEnabled:
+                    type: boolean
+                  group:
                     type: string
                   id:
                     type: string
-                  leaderString:
-                    type: string
-                  leastSquaresDecay:
-                    type: number
+                  loadFeedback:
+                    type: boolean
                   loadImbalancePercentage:
                     type: number
-                  maxUMultiplicativeIncrement:
+                  mapUpdateInterval:
+                    type: number
+                  maxProperties:
+                    type: number
+                  maxResources:
+                    type: number
+                  maxTestTimeout:
+                    type: number
+                  maxTtl:
+                    type: number
+                  minPingableRegionFraction:
+                    type: number
+                  minTestInterval:
+                    type: number
+                  minTtl:
                     type: number
                   name:
                     type: string
-                  resourceInstance:
-                    items:
-                      properties:
-                        datacenterId:
-                          type: number
-                        loadObject:
-                          type: string
-                        loadObjectPort:
-                          type: number
-                        loadServers:
-                          items:
-                            type: string
-                          type: array
-                        useDefaultLoadObject:
-                          type: boolean
-                      type: object
-                    type: array
+                  pingInterval:
+                    type: number
+                  pingPacketSize:
+                    type: number
+                  roundRobinPrefix:
+                    type: string
+                  servermonitorLivenessCount:
+                    type: number
+                  servermonitorLoadCount:
+                    type: number
+                  servermonitorPool:
+                    type: string
+                  signAndServe:
+                    description: If set (true) we will sign the domain's resource
+                      records so that they can be validated by a validating resolver.
+                    type: boolean
+                  signAndServeAlgorithm:
+                    description: 'The signing algorithm to use for signAndServe. One
+                      of the following values: RSA_SHA1, RSA_SHA256, RSA_SHA512, ECDSA_P256_SHA256,
+                      ECDSA_P384_SHA384, ED25519, ED448.'
+                    type: string
                   type:
                     type: string
-                  upperBound:
-                    type: number
                   waitOnComplete:
                     type: boolean
                 type: object

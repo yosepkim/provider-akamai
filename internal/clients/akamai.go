@@ -26,6 +26,7 @@ const (
 	errExtractCredentials   = "cannot extract credentials"
 	errUnmarshalCredentials = "cannot unmarshal akamai credentials as JSON"
 
+	keyConfig = "config"
 	keyClientSecret = "client_secret" 
 	keyHost = "host"
 	keyAccessToken = "access_token"
@@ -69,22 +70,26 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 		}
 
 		// Set credentials in Terraform provider configuration.
-		ps.Configuration = map[string]any{}
+		credValues := map[string]any{}
 		if v, ok := creds[keyClientSecret]; ok {
-			ps.Configuration[keyClientSecret] = v
+			credValues[keyClientSecret] = v
 		}
 		if v, ok := creds[keyHost]; ok {
-			ps.Configuration[keyHost] = v
+			credValues[keyHost] = v
 		}
 		if v, ok := creds[keyAccessToken]; ok {
-			ps.Configuration[keyAccessToken] = v
+			credValues[keyAccessToken] = v
 		}
 		if v, ok := creds[keyClientToken]; ok {
-			ps.Configuration[keyClientToken] = v
+			credValues[keyClientToken] = v
 		}
 		if v, ok := creds[keyAccountKey]; ok {
-			ps.Configuration[keyAccountKey] = v
+			credValues[keyAccountKey] = v
 		}
+
+		ps.Configuration = map[string]any{};
+		ps.Configuration[keyConfig] = creds;
+
 		return ps, nil
 	}
 }

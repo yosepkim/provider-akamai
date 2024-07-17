@@ -1,13 +1,20 @@
 apiVersion: gtm.edgeclound9.com/v1alpha1
-kind: Resource
+kind: Domain
 metadata:
-  name: test-gtm
+  name: gftwsh-gtm-domain
 spec:
   forProvider:
-    domain: "edgecloud9.com.akadns.net"
-    name: "edgecloud9.com.akadns.net"
-    aggregationType: "20"
+    contract: "1-5C13O2"
+    group: "grp_125952"
+    name: "gftwsh.com.akadns.net"
     type: "basic"
-    loadImbalancePercentage: 30
+    emailNotificationList: ["yoskim@akamai.com"]
+    defaultTimeoutPenalty: 25
+    loadImbalancePercentage: 50
+    defaultErrorPenalty: 75
+    cnameCoalescingEnabled: false
+    loadFeedback: true
+    endUserMappingEnabled: false
+    signAndServe: false
   providerConfigRef:
     name: default
