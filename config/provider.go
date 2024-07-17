@@ -10,8 +10,9 @@ import (
 
 	ujconfig "github.com/crossplane/upjet/pkg/config"
 
-	//"github.com/yosepkim/provider-akamai/config/null"
 	"github.com/yosepkim/provider-akamai/config/gtm"
+	"github.com/yosepkim/provider-akamai/config/property"
+	"github.com/yosepkim/provider-akamai/config/edgehostname"
 )
 
 const (
@@ -38,6 +39,8 @@ func GetProvider() *ujconfig.Provider {
 	for _, configure := range []func(provider *ujconfig.Provider){
 		// add custom config functions
 		gtm.Configure,
+		property.Configure,
+		edgehostname.Configure,
 	} {
 		configure(pc)
 	}

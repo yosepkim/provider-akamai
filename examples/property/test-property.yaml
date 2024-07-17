@@ -1,0 +1,36 @@
+apiVersion: edgehostname.edgeclound9.com/v1alpha1
+kind: Hostname
+metadata:
+  name: crossplane-test-edge-hostname
+  labels:
+    testing.upbound.io/example-name: crossplane-test-edge-hostname
+spec:
+  forProvider:
+    contractId: "1-5C13O2"
+    groupId: "grp_125952"
+    productId: "prd_SPM"
+    ipBehavior: "IPV4"
+    edgeHostname: "crossplane.edgecloud9.com.edgesuite.net"
+  providerConfigRef:
+    name: default
+---
+apiVersion: property.edgeclound9.com/v1alpha1
+kind: Property
+metadata:
+  name: crossplane-test-property
+  labels:
+    testing.upbound.io/example-name: crossplane-test-property-1
+spec:
+  forProvider:
+    name: "crossplane.edgecloud9.com"
+    contractId: "1-5C13O2"
+    groupId: "grp_125952"
+    productId: "prd_SPM"
+    hostnames:
+      -
+        cnameFrom: "crossplane.edgecloud9.com"
+        cnameTo: "akamai_edge_hostname.crossplane-edgecloud9-com-edgesuite-net.edge_hostname"
+        certProvisioningType: "DEFAULT"
+    ruleFormat: "latest"
+  providerConfigRef:
+    name: default

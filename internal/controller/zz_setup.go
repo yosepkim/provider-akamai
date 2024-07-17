@@ -9,7 +9,9 @@ import (
 
 	"github.com/crossplane/upjet/pkg/controller"
 
+	hostname "github.com/yosepkim/provider-akamai/internal/controller/edgehostname/hostname"
 	domain "github.com/yosepkim/provider-akamai/internal/controller/gtm/domain"
+	property "github.com/yosepkim/provider-akamai/internal/controller/property/property"
 	providerconfig "github.com/yosepkim/provider-akamai/internal/controller/providerconfig"
 )
 
@@ -17,7 +19,9 @@ import (
 // the supplied manager.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
+		hostname.Setup,
 		domain.Setup,
+		property.Setup,
 		providerconfig.Setup,
 	} {
 		if err := setup(mgr, o); err != nil {

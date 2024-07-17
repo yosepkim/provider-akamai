@@ -10,7 +10,7 @@ spec:
     type: "basic"
     emailNotificationList: ["yoskim@akamai.com"]
     defaultTimeoutPenalty: 25
-    loadImbalancePercentage: 50
+    loadImbalancePercentage: 10
     defaultErrorPenalty: 75
     cnameCoalescingEnabled: false
     loadFeedback: true
